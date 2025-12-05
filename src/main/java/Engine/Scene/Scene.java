@@ -3,6 +3,7 @@ package Engine.Scene;
 import Engine.Component.MeshRenderComponent;
 import Engine.Core.Render.Mesh;
 import Engine.Core.Render.SceneRender;
+import Engine.Core.Window;
 import Engine.GameObject.GameObject;
 
 import java.util.ArrayList;
@@ -14,9 +15,12 @@ public abstract class Scene {
     private List<GameObject> gameObjects = new ArrayList<>();
     private boolean isRunning = false;
     private SceneRender sceneRender;
+    private Projection projection;
 
 
     public Scene(){
+        projection = new Projection(Window.getWidth(), Window.getHeight());
+        init();
     }
 
     public abstract void init();
@@ -34,6 +38,14 @@ public abstract class Scene {
 
     public void cleanUp(){
 
+    }
+
+    public Projection getProjection() {
+        return projection;
+    }
+
+    public void resize(int width, int height) {
+        projection.updateProjMatrix(width, height);
     }
 
 

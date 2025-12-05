@@ -29,7 +29,6 @@ public class Main implements IAppLogic {
 
     @Override
     public void init(Window window, Scene scene, Render render) {
-        scene.init();
 
 
     }
@@ -40,6 +39,7 @@ public class Main implements IAppLogic {
 
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
+
     }
 }
 

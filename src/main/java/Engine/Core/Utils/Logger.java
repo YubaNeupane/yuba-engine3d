@@ -36,7 +36,7 @@ public class Logger {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement caller = stackTraceElements[3];
 
-        String callers = BLUE + "- [Function:" + caller.getMethodName().split("\\$")[1] + " Class:" + caller.getFileName()+"] - ";
+        String callers = BLUE + "- [Function:" + caller.getMethodName().split("\\$")[0] + " Class:" + caller.getFileName()+"] - ";
         System.out.println(
                 ENGINE_COLOR + "[" + ENGINE_TAG + "] " + callers + RESET +
                         color + level + ": " + message + RESET

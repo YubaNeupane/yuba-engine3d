@@ -47,7 +47,7 @@ public class Engine {
     }
 
     private void resize() {
-        // Nothing to be done yet
+        sceneManager.getCurrentScene().resize(window.getWidth(), window.getHeight());
     }
 
     private void run(){
@@ -73,6 +73,7 @@ public class Engine {
 
             if (deltaUpdate >= 1){
                 long diffTimeMillis = currentTime - updateTime;
+                sceneManager.getCurrentScene().update(diffTimeMillis);
                 appLogic.update(window, sceneManager.getCurrentScene(), diffTimeMillis);
                 updateTime = currentTime;
                 deltaUpdate--;

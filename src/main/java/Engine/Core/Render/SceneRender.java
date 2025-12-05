@@ -1,6 +1,7 @@
 package Engine.Core.Render;
 
 import Engine.Component.MeshRenderComponent;
+import Engine.Component.TransformComponent;
 import Engine.Core.Utils.Logger;
 import Engine.Scene.Scene;
 import Engine.Utils.Debug;
@@ -14,12 +15,20 @@ import static org.lwjgl.opengl.GL30.*;
 public class SceneRender {
 
     private ShaderProgram shaderProgram;
+    private UniformsMap uniformsMap;
 
     public SceneRender() {
         List<ShaderProgram.ShaderModuleData> shaderModuleDataList = new ArrayList<>();
         shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER));
         shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER));
         shaderProgram = new ShaderProgram(shaderModuleDataList);
+        createUniforms();
+    }
+
+    private void createUniforms() {
+        uniformsMap = new UniformsMap(shaderProgram.getProgramId());
+        uniformsMap.createUniform("projectionMatrix");
+        uniformsMap.createUniform("modelMatrix");
     }
 
     public void cleanUp(){
@@ -29,12 +38,14 @@ public class SceneRender {
     public void render(Scene scene){
         shaderProgram.bind();
 
+        uniformsMap.setUniform("projectionMatrix", scene.getProjection().getProjMatrix());
 
         scene.getGameObjects().forEach(gameObject -> {
             if (gameObject.getComponent(MeshRenderComponent.class) != null){
                 Mesh mesh = gameObject.getComponent(MeshRenderComponent.class).getMesh();
                 glBindVertexArray(mesh.getVaoId());
-                glDrawArrays(GL_TRIANGLES, 0, mesh.getNumVertices());
+                uniformsMap.setUniform("modelMatrix", gameObject.getComponent(TransformComponent.class).getModelMatrix());
+                glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
             }
         });
 

@@ -23,9 +23,10 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class Window {
 
     private final long windowHandle;
-    private int height;
+    private static int height;
     private final Callable<Void> resizeFunc;
-    private int width;
+    private static int width;
+
 
     public Window(String title, WindowOptions opts, Callable<Void> resizeFunc) {
         this.resizeFunc = resizeFunc;
@@ -97,11 +98,11 @@ public class Window {
         }
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
