@@ -1,6 +1,7 @@
 package Engine.GameObject;
 
 import Engine.Component.Component;
+import Engine.Core.Render.Model;
 import Engine.Core.Utils.Logger;
 import Engine.Entity.Entity;
 
@@ -8,6 +9,7 @@ import java.util.*;
 
 public abstract class GameObject extends Entity {
     private String name;
+    public List<Model> models = new ArrayList<>();
     public List<Component> components;
 
     public GameObject(String name){

@@ -3,41 +3,45 @@ package Engine.Scene;
 import Engine.Component.MeshRenderComponent;
 import Engine.Core.Render.Mesh;
 import Engine.Core.Render.SceneRender;
+import Engine.Core.Render.Texture.TextureCache;
 import Engine.Core.Window;
 import Engine.GameObject.GameObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Scene {
 
     protected String name;
-    private List<GameObject> gameObjects = new ArrayList<>();
+    private final Map<String, GameObject> gameObjects = new HashMap<>();
     private boolean isRunning = false;
     private SceneRender sceneRender;
-    private Projection projection;
+    private final Projection projection;
+    private final TextureCache textureCache;
 
 
     public Scene(){
         projection = new Projection(Window.getWidth(), Window.getHeight());
-        init();
+        textureCache = new TextureCache();
     }
 
     public abstract void init();
 
 
     public void start(){
-        for(GameObject gameObject: gameObjects){
+        for(GameObject gameObject: gameObjects.values()){
             gameObject.start();
         }
     }
 
     public List<GameObject> getGameObjects() {
-        return gameObjects;
+        return gameObjects.values().stream().toList();
     }
 
     public GameObject getGameObjectByName(String name){
-        return gameObjects.stream().filter(gameObject -> gameObject.getName().equals(name)).findFirst().orElse(null);
+        return gameObjects.getOrDefault(name,null);
     }
 
     public void cleanUp(){
@@ -52,12 +56,16 @@ public abstract class Scene {
         projection.updateProjMatrix(width, height);
     }
 
+    public TextureCache getTextureCache() {
+        return textureCache;
+    }
+
 
     public void addGameObjectToScene(GameObject gameObject){
         if(!isRunning){
-           gameObjects.add(gameObject);
+           gameObjects.put(gameObject.getName(),gameObject);
         }else{
-            gameObjects.add(gameObject);
+            gameObjects.put(gameObject.getName(),gameObject);
             gameObject.start();
         }
     }

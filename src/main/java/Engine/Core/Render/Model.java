@@ -1,26 +1,34 @@
 package Engine.Core.Render;
 
+import Engine.Entity.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
     private final String id;
-    private List<Mesh> meshList;
+    private List<Entity> entitiesList;
+    private List<Material> materialList;
 
-    public Model(String id, List<Mesh> meshList) {
+    public Model(String id, List<Material> materialList) {
         this.id = id;
-        this.meshList = meshList;
+        entitiesList = new ArrayList<>();
+        this.materialList = materialList;
     }
 
     public void cleanup() {
-        meshList.forEach(Mesh::cleanup);
+        materialList.forEach(Material::cleanup);
+    }
+
+    public List<Entity> getEntitiesList() {
+        return entitiesList;
     }
 
     public String getId() {
         return id;
     }
 
-    public List<Mesh> getMeshList() {
-        return meshList;
+    public List<Material> getMaterialList() {
+        return materialList;
     }
 }
