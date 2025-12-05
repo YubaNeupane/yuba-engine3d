@@ -1,10 +1,10 @@
-package Engine.Component;
+package Engine.Entity;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class TransformComponent extends Component {
+public abstract class Entity {
     private final String id;
     private final String modelId;
     private Matrix4f modelMatrix;
@@ -12,13 +12,14 @@ public class TransformComponent extends Component {
     private Quaternionf rotation;
     private float scale;
 
-    public TransformComponent() {
-        this.id = "";
-        this.modelId = "";
+    protected Entity(String id, String modelId) {
+        this.id = id;
+        this.modelId = modelId;
         modelMatrix = new Matrix4f();
         position = new Vector3f();
         rotation = new Quaternionf();
         scale = 1;
+        updateModelMatrix();
     }
 
     public String getId() {
@@ -64,20 +65,5 @@ public class TransformComponent extends Component {
 
     private void updateModelMatrix() {
         modelMatrix.translationRotateScale(position, rotation, scale);
-    }
-
-    @Override
-    public void update(float dt) {
-
-    }
-
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void render() {
-
     }
 }

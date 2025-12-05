@@ -1,14 +1,10 @@
 package Engine.Core.Render;
 
 import Engine.Component.MeshRenderComponent;
-import Engine.Component.TransformComponent;
-import Engine.Core.Utils.Logger;
 import Engine.Scene.Scene;
-import Engine.Utils.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 import static org.lwjgl.opengl.GL30.*;
 
@@ -44,7 +40,7 @@ public class SceneRender {
             if (gameObject.getComponent(MeshRenderComponent.class) != null){
                 Mesh mesh = gameObject.getComponent(MeshRenderComponent.class).getMesh();
                 glBindVertexArray(mesh.getVaoId());
-                uniformsMap.setUniform("modelMatrix", gameObject.getComponent(TransformComponent.class).getModelMatrix());
+                uniformsMap.setUniform("modelMatrix", gameObject.getModelMatrix());
                 glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
             }
         });

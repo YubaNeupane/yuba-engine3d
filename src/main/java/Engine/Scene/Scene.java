@@ -36,6 +36,10 @@ public abstract class Scene {
         return gameObjects;
     }
 
+    public GameObject getGameObjectByName(String name){
+        return gameObjects.stream().filter(gameObject -> gameObject.getName().equals(name)).findFirst().orElse(null);
+    }
+
     public void cleanUp(){
 
     }

@@ -3,15 +3,12 @@ package Engine;
 import Engine.Core.IAppLogic;
 import Engine.Core.Render.Render;
 import Engine.Core.Window;
-import Engine.Scene.Scene;
 import Engine.Scene.SceneManager;
 import Engine.Utils.Time;
 
-import java.util.PrimitiveIterator;
-import java.util.Timer;
 
 public class Engine {
-    public static final int TARGET_UPS = 30;
+    public static final int TARGET_UPS = 60;
     private final IAppLogic appLogic;
     private final Window window;
     private Render render;
@@ -47,7 +44,7 @@ public class Engine {
     }
 
     private void resize() {
-        sceneManager.getCurrentScene().resize(window.getWidth(), window.getHeight());
+        sceneManager.getCurrentScene().resize(Window.getWidth(), Window.getHeight());
     }
 
     private void run(){
