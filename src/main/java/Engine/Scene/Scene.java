@@ -6,6 +6,7 @@ import Engine.Core.Render.SceneRender;
 import Engine.Core.Render.Texture.TextureCache;
 import Engine.Core.Window;
 import Engine.GameObject.GameObject;
+import Engine.ImGui.IGuiInstance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public abstract class Scene {
     private final Projection projection;
     private final TextureCache textureCache;
     private final Camera camera;
+    private IGuiInstance guiInstance;
+
 
 
     public Scene(){
@@ -73,6 +76,14 @@ public abstract class Scene {
             gameObjects.put(gameObject.getName(),gameObject);
             gameObject.start();
         }
+    }
+
+    public void setGuiInstance(IGuiInstance guiInstance) {
+        this.guiInstance = guiInstance;
+    }
+
+    public IGuiInstance getGuiInstance() {
+        return guiInstance;
     }
 
 

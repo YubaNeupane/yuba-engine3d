@@ -13,12 +13,13 @@ import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class Texture {
+
     private int textureId;
     private String texturePath;
 
-    public Texture(int width, int height, ByteBuffer buffer){
+    public Texture(int width, int height, ByteBuffer buf) {
         this.texturePath = "";
-
+        generateTexture(width, height, buf);
     }
 
     public Texture(String texturePath) {
@@ -50,7 +51,6 @@ public class Texture {
         glDeleteTextures(textureId);
     }
 
-
     private void generateTexture(int width, int height, ByteBuffer buf) {
         textureId = glGenTextures();
 
@@ -66,5 +66,4 @@ public class Texture {
     public String getTexturePath() {
         return texturePath;
     }
-
 }

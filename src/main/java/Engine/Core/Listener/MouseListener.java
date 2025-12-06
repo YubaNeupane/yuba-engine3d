@@ -2,109 +2,68 @@ package Engine.Core.Listener;
 
 import org.joml.Vector2f;
 
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseListener {
-    private static MouseListener instance;
+    private Vector2f currentPos;
+    private Vector2f displVec;
+    private boolean inWindow;
+    private boolean leftButtonPressed;
+    private Vector2f previousPos;
+    private boolean rightButtonPressed;
 
-    private double scrollX, scrollY;
-    private double xPos, yPos, lastX, lastY;
-    private final boolean[] mouseButtonPressed = new boolean[3];
-    private boolean isDragging;
-    private static Vector2f displVec;
-
-    private MouseListener(){
-        this.scrollX = 0.0;
-        this.scrollY = 0.0;
-        this.xPos = 0.0;
-        this.yPos = 0.0;
-        this.lastX = 0.0;
-        this.lastY = 0.0;
-        this.isDragging = false;
+    public MouseListener(long windowHandle) {
+        previousPos = new Vector2f(-1, -1);
+        currentPos = new Vector2f();
         displVec = new Vector2f();
+        leftButtonPressed = false;
+        rightButtonPressed = false;
+        inWindow = false;
+
+        glfwSetCursorPosCallback(windowHandle, (handle, xpos, ypos) -> {
+            currentPos.x = (float) xpos;
+            currentPos.y = (float) ypos;
+        });
+        glfwSetCursorEnterCallback(windowHandle, (handle, entered) -> inWindow = entered);
+        glfwSetMouseButtonCallback(windowHandle, (handle, button, action, mode) -> {
+            leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
+            rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
+        });
     }
 
-    public static MouseListener get(){
-        if(MouseListener.instance == null){
-            instance = new MouseListener();
-        }
-        return instance;
+    public Vector2f getCurrentPos() {
+        return currentPos;
     }
 
-    public static void mousePosCallback(Long window, double xPos, double yPos){
-        get().lastX = get().xPos;
-        get().lastY = get().yPos;
-
-        get().xPos = xPos;
-        get().yPos = yPos;
-    }
-
-    public static void mouseButtonCallback(Long window, int button, int action, int mods){
-        if(button < get().mouseButtonPressed.length){
-            if(action == GLFW_PRESS){
-                get().mouseButtonPressed[button] = true;
-            }else{
-                get().mouseButtonPressed[button] = false;
-                get().isDragging = false;
-            }
-        }
-    }
-
-    public static void mouseScrollCallback(Long window, double xOffset, double yOffset){
-        get().scrollX = xOffset;
-        get().scrollY = yOffset;
-    }
-
-    public static void endFrame(){
-        get().scrollX = 0.0;
-        get().scrollY = 0.0;
-        get().lastX = get().xPos;
-        get().lastY = get().yPos;
-        get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
-    }
-
-    public static float getX(){
-        return (float)get().xPos;
-    }
-
-    public static float getY(){
-        return (float)get().yPos;
-    }
-
-    public static float getDx(){
-        return (float) (get().lastX - get().xPos);
-    }
-
-    public Vector2f getDisplVec(){
+    public Vector2f getDisplVec() {
         return displVec;
     }
 
-    public static float getDy(){
-        return (float) (get().lastY - get().yPos);
-    }
-
-    public static float getScrollX(){
-        return (float) get().scrollX;
-    }
-
-    public static float getScrollY(){
-        return (float)get().scrollY;
-    }
-
-    public static boolean isDragging(){
-        return get().isDragging;
-    }
-
-    public boolean isMouseButtonDown(int button){
-        if(button < get().mouseButtonPressed.length){
-            return get().mouseButtonPressed[button];
+    public void input() {
+        displVec.x = 0;
+        displVec.y = 0;
+        if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
+            double deltax = currentPos.x - previousPos.x;
+            double deltay = currentPos.y - previousPos.y;
+            boolean rotateX = deltax != 0;
+            boolean rotateY = deltay != 0;
+            if (rotateX) {
+                displVec.y = (float) deltax;
+            }
+            if (rotateY) {
+                displVec.x = (float) deltay;
+            }
         }
-        return false;
+        previousPos.x = currentPos.x;
+        previousPos.y = currentPos.y;
     }
 
+    public boolean isLeftButtonPressed() {
+        return leftButtonPressed;
+    }
 
-
-
-
+    public boolean isRightButtonPressed() {
+        return rightButtonPressed;
+    }
 
 }

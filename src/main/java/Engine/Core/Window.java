@@ -28,6 +28,8 @@ public class Window {
     private final Callable<Void> resizeFunc;
     private static int width;
 
+    private MouseListener mouseListener;
+
 
     public Window(String title, WindowOptions opts, Callable<Void> resizeFunc) {
         this.resizeFunc = resizeFunc;
@@ -87,6 +89,8 @@ public class Window {
         glfwGetFramebufferSize(windowHandle, arrWidth, arrHeight);
         width = arrWidth[0];
         height = arrHeight[0];
+
+        mouseListener = new MouseListener(windowHandle);
     }
 
     public void cleanUp() {
@@ -115,10 +119,20 @@ public class Window {
         return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
     }
 
+    public void keyCallBack(int key, int action) {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+            glfwSetWindowShouldClose(windowHandle, true); // We will detect this in the rendering loop
+        }
+    }
+
+    public MouseListener getMouseInput() {
+        return mouseListener;
+    }
+
     private void setupCallbacks(){
-        glfwSetCursorPosCallback(windowHandle, MouseListener::mousePosCallback);
-        glfwSetMouseButtonCallback(windowHandle, MouseListener::mouseButtonCallback);
-        glfwSetScrollCallback(windowHandle, MouseListener::mouseScrollCallback);
+//        glfwSetCursorPosCallback(windowHandle, MouseListener::mousePosCallback);
+//        glfwSetMouseButtonCallback(windowHandle, MouseListener::mouseButtonCallback);
+//        glfwSetScrollCallback(windowHandle, MouseListener::mouseScrollCallback);
 
         glfwSetKeyCallback(windowHandle, KeyListener::keyCallback);
         glfwSetCursorEnterCallback(windowHandle, WindowListener::setCustomerEnterCallback);

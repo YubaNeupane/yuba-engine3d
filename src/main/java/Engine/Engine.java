@@ -3,6 +3,7 @@ package Engine;
 import Engine.Core.IAppLogic;
 import Engine.Core.Render.Render;
 import Engine.Core.Window;
+import Engine.ImGui.IGuiInstance;
 import Engine.Scene.SceneManager;
 import Engine.Utils.Time;
 
@@ -26,7 +27,7 @@ public class Engine {
         this.targetFps = windowOptions.fps;
         this.targetUps = windowOptions.ups;
         this.appLogic = appLogic;
-        render = new Render();
+        render = new Render(window);
         this.sceneManager = SceneManager.get();
     }
 
@@ -45,6 +46,7 @@ public class Engine {
 
     private void resize() {
         sceneManager.getCurrentScene().resize(Window.getWidth(), Window.getHeight());
+        render.resize(Window.getWidth(), Window.getHeight());
     }
 
     private void run(){
@@ -56,6 +58,8 @@ public class Engine {
 
         long updateTime = initialTime;
         appLogic.init(window,sceneManager.getCurrentScene(),render);
+        IGuiInstance iGuiInstance =sceneManager.getCurrentScene().getGuiInstance();
+
 
         while (running && !window.windowShouldClose()){
             window.pollEvents();
@@ -65,7 +69,9 @@ public class Engine {
             deltaFps += (currentTime - initialTime) / timeRender;
 
             if(targetFps <= 0 || deltaFps >= 1){
-                appLogic.input(window, sceneManager.getCurrentScene(), currentTime - initialTime);
+                window.getMouseInput().input();
+                boolean inputConsumed = iGuiInstance != null && iGuiInstance.handleGuiInput(sceneManager.getCurrentScene(), window);
+                appLogic.input(window, sceneManager.getCurrentScene(), currentTime - initialTime,inputConsumed);
             }
 
             if (deltaUpdate >= 1){
