@@ -17,14 +17,15 @@ public abstract class Scene {
     protected String name;
     private final Map<String, GameObject> gameObjects = new HashMap<>();
     private boolean isRunning = false;
-    private SceneRender sceneRender;
     private final Projection projection;
     private final TextureCache textureCache;
+    private final Camera camera;
 
 
     public Scene(){
         projection = new Projection(Window.getWidth(), Window.getHeight());
         textureCache = new TextureCache();
+        camera = new Camera();
     }
 
     public abstract void init();
@@ -34,6 +35,10 @@ public abstract class Scene {
         for(GameObject gameObject: gameObjects.values()){
             gameObject.start();
         }
+    }
+
+    public Camera getCamera(){
+        return camera;
     }
 
     public List<GameObject> getGameObjects() {

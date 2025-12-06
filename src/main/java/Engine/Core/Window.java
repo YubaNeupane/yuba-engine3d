@@ -2,6 +2,7 @@ package Engine.Core;
 
 import Engine.Core.Listener.KeyListener;
 import Engine.Core.Listener.MouseListener;
+import Engine.Core.Listener.WindowListener;
 import Engine.Core.Utils.Logger;
 import Engine.Engine;
 import Engine.Scene.SceneManager;
@@ -120,6 +121,7 @@ public class Window {
         glfwSetScrollCallback(windowHandle, MouseListener::mouseScrollCallback);
 
         glfwSetKeyCallback(windowHandle, KeyListener::keyCallback);
+        glfwSetCursorEnterCallback(windowHandle, WindowListener::setCustomerEnterCallback);
     }
 
 

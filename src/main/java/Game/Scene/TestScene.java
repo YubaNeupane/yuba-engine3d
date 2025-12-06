@@ -18,21 +18,26 @@ public class TestScene extends Scene {
     @Override
     public void init() {
         GameObject cube = new Cube();
+        GameObject cube2 = new Cube("Cube 2");
+
         cube.setPosition(0,0,-2);
+        cube.setPosition(0,0,-1);
 
         addGameObjectToScene(cube);
+        addGameObjectToScene(cube2);
+
     }
 
 
 
     @Override
     public void update(float dt) {
-        rotation += 0.5;
-        if (rotation > 360) {
-            rotation = 0;
-        }
+//        rotation += 0.5;
+//        if (rotation > 360) {
+//            rotation = 0;
+//        }
 
-        getGameObjectByName("Cube").setRotation(1, 1, 1, (float) Math.toRadians(rotation));
+//        getGameObjectByName("Cube").setRotation(1, 1, 1, (float) Math.toRadians(rotation));
 
 //        getGameObjects().getFirst().getComponent(TransformComponent.class).updateModelMatrix();
     }

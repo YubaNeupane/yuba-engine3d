@@ -1,5 +1,7 @@
 package Engine.Core.Listener;
 
+import org.joml.Vector2f;
+
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
 public class MouseListener {
@@ -9,6 +11,7 @@ public class MouseListener {
     private double xPos, yPos, lastX, lastY;
     private final boolean[] mouseButtonPressed = new boolean[3];
     private boolean isDragging;
+    private static Vector2f displVec;
 
     private MouseListener(){
         this.scrollX = 0.0;
@@ -18,6 +21,7 @@ public class MouseListener {
         this.lastX = 0.0;
         this.lastY = 0.0;
         this.isDragging = false;
+        displVec = new Vector2f();
     }
 
     public static MouseListener get(){
@@ -30,6 +34,7 @@ public class MouseListener {
     public static void mousePosCallback(Long window, double xPos, double yPos){
         get().lastX = get().xPos;
         get().lastY = get().yPos;
+
         get().xPos = xPos;
         get().yPos = yPos;
     }
@@ -68,6 +73,10 @@ public class MouseListener {
 
     public static float getDx(){
         return (float) (get().lastX - get().xPos);
+    }
+
+    public Vector2f getDisplVec(){
+        return displVec;
     }
 
     public static float getDy(){
