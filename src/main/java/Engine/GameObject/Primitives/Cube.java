@@ -120,7 +120,7 @@ public class Cube extends GameObject {
                 // Back face
                 4, 6, 7, 5, 4, 7,};
 
-        Texture texture = SceneManager.get().getCurrentScene().getTextureCache().createTexture("resources/texture/cube.png");
+        Texture texture = SceneManager.get().getCurrentScene().getTextureCache().createTexture("resources/models/cube/cube.png");
         Material material = new Material();
         material.setTexturePath(texture.getTexturePath());
         List<Material> materialList = new ArrayList<>();

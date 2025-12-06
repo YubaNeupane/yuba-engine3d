@@ -18,7 +18,6 @@ public abstract class GameObject extends Entity {
         this.components = new ArrayList<>();
     }
 
-
     public String getName(){
         return name;
     }

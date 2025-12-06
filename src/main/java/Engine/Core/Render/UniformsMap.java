@@ -1,6 +1,7 @@
 package Engine.Core.Render;
 
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 
 import java.util.HashMap;
@@ -44,6 +45,10 @@ public class UniformsMap {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             glUniformMatrix4fv(getUniformLocation(uniformName), false, value.get(stack.mallocFloat(16)));
         }
+    }
+
+    public void setUniform(String uniformName, Vector4f value) {
+        glUniform4f(getUniformLocation(uniformName), value.x, value.y, value.z, value.w);
     }
 
 }

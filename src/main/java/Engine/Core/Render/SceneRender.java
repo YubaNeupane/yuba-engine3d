@@ -30,6 +30,8 @@ public class SceneRender {
         uniformsMap.createUniform("modelMatrix");
         uniformsMap.createUniform("viewMatrix");
         uniformsMap.createUniform("txtSampler");
+        uniformsMap.createUniform("material.diffuse");
+
     }
 
     public void cleanUp(){
@@ -51,17 +53,23 @@ public class SceneRender {
             for(Model model: gameObject.models){
                 List<Entity> entities = model.getEntitiesList();
                 for(Material material: model.getMaterialList()){
+                    uniformsMap.setUniform("material.diffuse", material.getDiffuseColor());
                     Texture texture = textureCache.getTexture(material.getTexturePath());
                     glActiveTexture(GL_TEXTURE0);
                     texture.bind();
+
+                    for (Mesh mesh: material.getMeshList()){
+                        glBindVertexArray(mesh.getVaoId());
+
+                        uniformsMap.setUniform("modelMatrix", gameObject.getModelMatrix());
+                        glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
+                    }
                 }
 
-                if (gameObject.getComponent(MeshRenderComponent.class) != null){
-                    Mesh mesh = gameObject.getComponent(MeshRenderComponent.class).getMesh();
-                    glBindVertexArray(mesh.getVaoId());
-                    uniformsMap.setUniform("modelMatrix", gameObject.getModelMatrix());
-                    glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
-                }
+//                if (gameObject.getComponent(MeshRenderComponent.class) != null){
+//                    Mesh mesh = gameObject.getComponent(MeshRenderComponent.class).getMesh();
+//
+//                }
             }
         });
 
